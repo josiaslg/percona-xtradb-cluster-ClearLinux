@@ -1,0 +1,82 @@
+https://forums.percona.com/t/a-replication-lag-on-percona-server-8-0-29-21/17282
+
+# You can run this script on your ClearLinux: 
+# sh -c "$(curl -sSL https://raw.githubusercontent.com/josiaslg/percona-xtradb-cluster-ClearLinux/8.0/README.ClearLinux)"
+# Install all developer tools to compile:
+sudo swupd bundle-add os-clr-on-clr-dev dev-utils c-basic go-basic devpkg-pcre protobuf
+# Start all process
+cd /usr/src/
+# Compile openssl 1_1_1-stable
+git clone -b OpenSSL_1_1_1-stable https://github.com/josiaslg/openssl
+cd openssl
+mkdir -p /opt/openssl/lib64
+./config  --prefix=/opt/openssl --libdir=/opt/openssl/lib64
+make -j 4
+make install clean
+
+# Now you are ready to compile xtrabackup versions.
+cd /usr/src/
+git clone https://github.com/josiaslg/percona-xtrabackup
+cd percona-xtrabackup
+
+# Install the procps because of proc/sysinfo.h
+swupd bundle-add  devpkg-procps-ng
+
+#To compile 8.0
+git checkout -b 8.0
+git submodule init extra/
+git submodule update extra/
+cmake -DWITH_SSL=/opt/openssl -DCMAKE_INSTALL_PREFIX=/usr/src/Percona-XtraBackup-8.0.29 -DBUILD_CONFIG=xtrabackup_release -DFORCE_INSOURCE_BUILD=1 && make -j4
+make all install
+make clean
+cd /usr/src/
+tar czf Percona-XtraBackup-8.0.29.tar.gz Percona-XtraBackup-8.0.29/
+rm -rf Percona-XtraBackup-8.0.29/
+
+# To compile 2.4
+git checkout -b 2.4
+git submodule init extra/
+git submodule update extra/
+cmake -DWITH_SSL=/opt/openssl -DCMAKE_INSTALL_PREFIX=/usr/src/Percona-XtraBackup-2.4 -DBUILD_CONFIG=xtrabackup_release -DFORCE_INSOURCE_BUILD=1 && make -j4
+make all install
+make clean
+cd /usr/src/
+tar czf Percona-XtraBackup-2.4.tar.gz Percona-XtraBackup-2.4/
+rm -rf Percona-XtraBackup-2.4/
+
+# Now you are ready to build percona-xtradb-cluster-ClearLinux
+# Warning: in the percona-xtradb-cluster-ClearLinux build the ldap autentication is off because is incompatible with openssl3.
+# If you don´t use, no problem.
+# lets go from here.
+
+cd /usr/src/
+git clone -b 8.0 https://github.com/josiaslg/percona-xtradb-cluster-ClearLinux
+cd percona-xtradb-cluster-ClearLinux
+git submodule init wsrep-lib
+git submodule update wsrep-lib
+git submodule init percona-xtradb-cluster-galera
+git submodule update percona-xtradb-cluster-galera
+cd  percona-xtradb-cluster-galera
+git submodule init wsrep/src && git submodule update wsrep/src
+git submodule init && git submodule update
+cd ..
+git submodule init extra/
+git submodule update extra/
+git clone -b percona-4.x-8.0 https://github.com/percona/wsrep-API.git wsrep-lib/wsrep-API/v26
+ 
+# Now start the buildprocess
+mkdir ./pxc-build
+
+# This is missing steps from the official doc:
+cp /usr/src/Percona-XtraBackup-2.4.tar.gz ./pxc-build
+cp /usr/src/Percona-XtraBackup-8.0.29.tar.gz ./pxc-build
+
+# Now we are ready to compile
+./build-ps/build-binary-clearlinux.sh ./pxc-build
+
+# Wait 1 hour or more (will depend of you ram and cpu cores).
+# If everything ok, you will see the tar ready on pxc-build
+cd ./pxc-build
+ls
+# To see how to deploy, see 
+# https://github.com/josiaslg/percona-xtradb-cluster-ClearLinux-deploy/README.md
