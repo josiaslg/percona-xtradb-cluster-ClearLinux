@@ -1,5 +1,3 @@
-https://forums.percona.com/t/a-replication-lag-on-percona-server-8-0-29-21/17282
-
 # You can run this script on your ClearLinux: 
 # sh -c "$(curl -sSL https://raw.githubusercontent.com/josiaslg/percona-xtradb-cluster-ClearLinux/8.0/README.ClearLinux)"
 # Install all developer tools to compile:
