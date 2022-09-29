@@ -24,7 +24,7 @@ swupd bundle-add  devpkg-procps-ng
 git checkout -b 8.0
 git submodule init extra/
 git submodule update extra/
-cmake -DWITH_SSL=/opt/openssl -DCMAKE_INSTALL_PREFIX=/usr/src/Percona-XtraBackup-8.0.29 -DBUILD_CONFIG=xtrabackup_release -DFORCE_INSOURCE_BUILD=1 && make -j6
+cmake -DWITH_SSL=/opt/openssl -DCMAKE_INSTALL_PREFIX=/usr/src/Percona-XtraBackup-8.0.29 -DBUILD_CONFIG=xtrabackup_release -DFORCE_INSOURCE_BUILD=1 && make -j6 && 
 make DESTDIR=/usr/src/Percona-XtraBackup-8.0.29 all install
 make clean
 cd /usr/src/
@@ -35,8 +35,8 @@ rm -rf Percona-XtraBackup-8.0.29/
 git checkout -b 2.4
 git submodule init extra/
 git submodule update extra/
-cmake -DWITH_SSL=/opt/openssl -DCMAKE_INSTALL_PREFIX=/usr/src/Percona-XtraBackup-2.4 -DBUILD_CONFIG=xtrabackup_release -DFORCE_INSOURCE_BUILD=1 && make -j6
-make DESTDIR=/usr/src/Percona-XtraBackup-2.4 all install
+cmake -DWITH_SSL=/opt/openssl -DCMAKE_INSTALL_PREFIX=/usr/src/Percona-XtraBackup-2.4 -DBUILD_CONFIG=xtrabackup_release -DFORCE_INSOURCE_BUILD=1 && make -j6 && 
+make DESTDIR=/usr/src/Percona-XtraBackup-2.4 all install 
 make clean
 cd /usr/src/
 tar czf Percona-XtraBackup-2.4.tar.gz Percona-XtraBackup-2.4/
