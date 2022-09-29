@@ -1,7 +1,7 @@
 # You can run this script on your ClearLinux: 
 # sh -c "$(curl -sSL https://raw.githubusercontent.com/josiaslg/percona-xtradb-cluster-ClearLinux/8.0/README.ClearLinux)"
 # Install all developer tools to compile:
-sudo swupd bundle-add os-clr-on-clr-dev dev-utils c-basic go-basic devpkg-pcre protobuf
+sudo swupd bundle-add os-clr-on-clr dev-utils c-basic go-basic devpkg-pcre protobuf
 # Start all process
 cd /usr/src/
 # Compile openssl 1_1_1-stable
@@ -24,8 +24,8 @@ swupd bundle-add  devpkg-procps-ng
 git checkout -b 8.0
 git submodule init extra/
 git submodule update extra/
-cmake -DWITH_SSL=/opt/openssl -DCMAKE_INSTALL_PREFIX=/usr/src/Percona-XtraBackup-8.0.29 -DBUILD_CONFIG=xtrabackup_release -DFORCE_INSOURCE_BUILD=1 && make -j4
-make all install
+cmake -DWITH_SSL=/opt/openssl -DCMAKE_INSTALL_PREFIX=/usr/src/Percona-XtraBackup-8.0.29 -DBUILD_CONFIG=xtrabackup_release -DFORCE_INSOURCE_BUILD=1 && make -j6
+make DESTDIR=/usr/src/Percona-XtraBackup-8.0.29 all install
 make clean
 cd /usr/src/
 tar czf Percona-XtraBackup-8.0.29.tar.gz Percona-XtraBackup-8.0.29/
@@ -35,8 +35,8 @@ rm -rf Percona-XtraBackup-8.0.29/
 git checkout -b 2.4
 git submodule init extra/
 git submodule update extra/
-cmake -DWITH_SSL=/opt/openssl -DCMAKE_INSTALL_PREFIX=/usr/src/Percona-XtraBackup-2.4 -DBUILD_CONFIG=xtrabackup_release -DFORCE_INSOURCE_BUILD=1 && make -j4
-make all install
+cmake -DWITH_SSL=/opt/openssl -DCMAKE_INSTALL_PREFIX=/usr/src/Percona-XtraBackup-2.4 -DBUILD_CONFIG=xtrabackup_release -DFORCE_INSOURCE_BUILD=1 && make -j6
+make DESTDIR=/usr/src/Percona-XtraBackup-2.4 all install
 make clean
 cd /usr/src/
 tar czf Percona-XtraBackup-2.4.tar.gz Percona-XtraBackup-2.4/
@@ -66,8 +66,8 @@ git clone -b percona-4.x-8.0 https://github.com/percona/wsrep-API.git wsrep-lib/
 mkdir ./pxc-build
 
 # This is missing steps from the official doc:
-cp /usr/src/Percona-XtraBackup-2.4.tar.gz ./pxc-build
-cp /usr/src/Percona-XtraBackup-8.0.29.tar.gz ./pxc-build
+cp /usr/src/Percona-XtraBackup-2.4.tar.gz ./pxc-build/
+cp /usr/src/Percona-XtraBackup-8.0.29.tar.gz ./pxc-build/
 
 # Now we are ready to compile
 ./build-ps/build-binary-clearlinux.sh ./pxc-build
