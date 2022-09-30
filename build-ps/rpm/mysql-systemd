@@ -61,7 +61,7 @@ install_db () {
     fi
 
     # Create initial db
-    /usr/sbin/mysqld --initialize --datadir="$datadir" --user=mysql
+    /usr/local/mysql/bin/mysqld --initialize --datadir="$datadir" --user=mysql
     exit 0
 }
 
@@ -265,7 +265,7 @@ check_running()
 # Position will be stored in wsrep_start_position_opt global.
 wsrep_start_position_opt=""
 wsrep_recover_position() {
-  local mysqld_cmd="/usr/sbin/mysqld"
+  local mysqld_cmd="/usr/local/mysql/bin/mysqld"
   local ret=0
   local uuid=""
   local seqno=0
