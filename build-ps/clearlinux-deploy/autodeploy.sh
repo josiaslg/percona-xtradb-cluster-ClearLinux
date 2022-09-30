@@ -4,6 +4,9 @@ echo "This file can't be used to upgrade because replace datafiles."
 echo "CRTL + c to cancel."
 sleep 10
 echo "Continue with deploy"
+echo "Add Group and User MySQL."
+groupadd -g 27 -o -r mysql
+useradd -M -N -g mysql -o -r -d /var/lib/mysql -s /bin/false -c "MySQL Server" -u 27 mysql
 echo "Locating the tar.gz and extract to /usr/local/mysql"
 tar xzf percona-xtradb* -C /usr/local/mysql
 echo "Fixing systemd file"
@@ -26,7 +29,7 @@ echo "Creating other folders."
 mkdir -p /var/lib/mysql
 chown mysql:mysql /var/lib/mysql
 :> /var/log/mysqld.log
-chown mysql:mysql /var/log/mysqld.log 
+chown mysql:mysql /var/log/mysqld.log
 mkdir -p /var/run/mysqld
 chown mysql:mysql /var/run/mysqld
 echo "Initialize the default database."
