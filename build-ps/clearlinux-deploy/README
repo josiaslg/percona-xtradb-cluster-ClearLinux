@@ -1,0 +1,31 @@
+# Install users and groups
+# For group: groupadd -g 27 -o -r mysql
+# For user: useradd -M -N -g mysql -o -r -d /var/lib/mysql -s /bin/false -c "MySQL Server" -u 27 mysql
+# Edit sysctl: 
+# fs.file-max=500000
+# Edit /etc/security/limits.conf
+# * soft nproc 65535  
+# * hard nproc 65535  
+# * soft nofile 65535  
+# * hard nofile 65535
+
+# Copy the result file from build and extract to /usr/local/mysql
+
+# Configuration
+# Copy openssl folder to /opt/ (openssl3 not work with percona8/mysql8 and tools).
+# Copy mysql folder to /etc/
+# Copy mysql.service to /etc/systemd/system/
+# Copy profile to /etc/
+# Copy mysql-systemd to /usr/local/mysql/bin/mysql-systemd
+# Initialize the database
+# /usr/local/mysql/bin/mysqld --initialize-insecure --console --user=mysql --datadir=/var/lib/mysql
+# if you want jemalloc on mysql (optional)
+# Copy sysconfig folder to /etc/
+# Copy jemalloc folder to /opt/
+
+# Start MySQL
+# systemctl start mysql
+
+# Change password: mysql -uroot
+# The --initialize-insecure above install everything without password on root, so, caution.
+# Execute autodeploy.sh if you want all automated.

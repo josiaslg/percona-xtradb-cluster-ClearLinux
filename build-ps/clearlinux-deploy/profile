@@ -1,0 +1,2 @@
+PATH="$PATH:/usr/local/mysql/bin"
+PATH="$PATH:/usr/local/mysql/bin/pxc_extra/pxb-8.0/bin"

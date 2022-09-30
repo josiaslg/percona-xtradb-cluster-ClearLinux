@@ -1,0 +1,1 @@
+LD_PRELOAD=/opt/jemalloc/lib/libjemalloc.so
